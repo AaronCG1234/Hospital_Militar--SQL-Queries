@@ -1,1 +1,40 @@
 
+/*El siguiente procedimiento devuelve la lista de instrumentales
+ de un almacén determinado*/
+
+create procedure pInstrumxAlmacenList
+@almacen int
+as
+begin
+    select dsc_instrumental as Instrumentos from p_Instrumental
+    where id_almacen = @almacen
+end
+
+
+
+/*El siguiente procedimiento permite insertar un nuevo
+ usuario con todos sus atributos*/
+
+create procedure insertarUsuario
+@id int,
+@datos varchar(55),
+@dni int,
+@pass varchar(7)
+as
+insert into p_Usuario(id,datos_personales,dni,password)
+values (@id,@datos,@dni,@pass)
+
+
+
+
+/*En este procedimiento realizamos la consulta de instrumentos, su estado y su almacen entre un rango de dos fechas.*/
+
+create procedure instrumentosxfechas
+@f1 DateTime,
+@f2 DateTime
+as
+begin
+select inst.dsc_instrumental as Instrumentos, e.dsc_estado as Estado, a.dsc_almacen as Almacen from
+p_Instrumental inst join p_Estado e on  inst.id_estado=e.id join p_Almacen a on inst.id_almacen=a.id
+where  fecha_registro between @f1 and @f2
+end
