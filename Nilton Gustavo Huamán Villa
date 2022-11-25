@@ -1,1 +1,52 @@
 
+/*El siguiente procedimiento devuelve la cantidad 
+de instrumentales en un almacén determinado
+
+create procedure pInstrumxAlmacen
+@almacen int
+as
+begin
+select pIA.id_instrumental, pI.dsc_instrumental from
+p_Instrumental_almacen as pIA, p_Instrumental as pI
+where  pIA.id_almacen = @almacen 
+and pIA.id_instrumental=pI.id
+select  count(id_instrumental) as NumTotalInstrumentos 
+from p_Instrumental_almacen
+where  id_almacen = @almacen
+end
+
+
+
+
+/*El siguiente procedimiento devuelve la cantidad de cada estado de los instrumentos registrados por el usuario*/
+
+create procedure pCantidad_registros_de_estado_por_usuario
+@id_usuario int 
+as 
+begin
+select Est.dsc_estado, count (Usu.id_usuario) as total
+from p_Usuario as Us
+join p_Instrumental Usu on Usu.id_usuario = Us.id
+join p_Instrumental_Estado EI on Ei.id_estado  = Usu.id_estado
+join p_Estado Est on Est.id = Ei.id_estado 
+where Us.id =@id_usuario
+group by dsc_estado
+end
+
+
+
+/*El siguiente procedimiento devuelve la cantidad de fases de los instrumentos en un almacén determinado
+
+create procedure pCantidad_de_fases_almacen
+@id_fase int 
+as 
+begin
+select  Alm.dsc_almacen, count (Fi.id_fase) as total
+from p_Fase as Fa 
+join p_Instrumental_Fase Fi on Fi.id_fase = Fa.id
+join p_Instrumental Instrum on Instrum.id = Fi.id_instrumental
+join p_Instrumental_Almacen IA on IA.id_almacen = Instrum.id_almacen 
+join p_Almacen Alm on Alm.id = IA.id_almacen
+where FA.id =@id_fase
+group by dsc_almacen
+end
