@@ -1,1 +1,47 @@
 
+/*Procedure para saber la cantidad de instrumentales 
+usados en cada operacion */
+
+create procedure pInstrumxOperacion
+@id_operacion int
+as
+begin
+select inst._instrumental, ope.dsc_operacion
+        from p_Instrumental inst
+        join p_Instrumental_Operacion IO on inst.id = IO.id_instrumental
+        join p_Operacion ope on io.id_operacion = ope.id
+        where   inst.cantidad = @cantidad
+end
+
+
+
+/*Procedure para saber cuantos instrumentales
+ posee cada almacén*/
+
+create procedure pinstrumentalxalmacen
+@id_instrumental int 
+as 
+begin
+select  Alm.dsc_almacen 
+from p_Instrumental as In 
+join p_Instrumental_Almacen IA 
+on IA.id_almacen = Instrum.id_almacen 
+join p_Almacen Alm on Alm.id = IA.id_almacen
+where In.id =@id_almacen
+group by dsc_almacen
+end
+
+
+
+/*Por cada usuario indicar el instrumental usado en cada operación*/
+
+create procedure usuarioxInstrumental
+@id_instrumental int
+as
+begin
+select inst._instrumental, ope.dsc_operacion
+ from p_Instrumental inst
+ join p_Instrumental_Operacion IO on inst.id = IO.id_instrumental
+ join p_Operacion ope on io.id_operacion = ope.id
+ where   inst.id_usuario = @id_usuario
+end
