@@ -1,1 +1,48 @@
 
+/*Procedure para saber la cantidad de instrumentos
+que se encuentran en un determinado estado*/
+
+create procedure pInstrumxEstado
+@estado int
+as
+begin
+select pIE.id_instrumental, pI.dsc_instrumental from
+p_Instrumental_Estado as pIE, p_Instrumental as pI
+where  pIE.id_estado = @estado and pIE.id_instrumental=pI.id
+select  count(id_instrumental) 
+as NumTotalInstrumentos from p_Instrumental_Estado
+where  id_estado = @estado
+end
+
+
+
+/*Procedure para saber la descripción de instrumentos
+que se encuentran en una determinada fase*/
+
+create procedure pInstrumentoxFase
+    @id_fase int
+    as
+    begin
+        select inst.dsc_instrumental,fase.dsc_fase
+        from p_Instrumental as inst
+        join p_Instrumental_Fase fa on inst.id = fa.id_instrumental
+        join p_Fase fase on fase.id = fa.id_fase
+        where   fase.id = @id_fase
+    end
+    
+    
+    
+/*Procedure para saber los datos de descripción y operación
+de los instrumentales registrados por un usuario*/
+
+create procedure ListaInstrumentalxUsuarioxOperacion
+@id_usuario int
+as
+begin
+select inst.dsc_instrumental, ope.dsc_operacion
+        from p_Instrumental inst
+        join p_Instrumental_Operacion IO on inst.id = IO.id_instrumental
+        join p_Operacion ope on io.id_operacion = ope.id
+        where   inst.id_usuario = @id_usuario
+end
+
